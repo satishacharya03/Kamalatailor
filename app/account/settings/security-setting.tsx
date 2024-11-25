@@ -1,0 +1,1 @@
+const shopName = "Kamala Tailoritem"; 
