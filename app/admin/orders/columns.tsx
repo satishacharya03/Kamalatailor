@@ -40,7 +40,7 @@ export const OrderColumns: ColumnDef<OrderWithDetails>[] = [
     accessorKey: "id",
     header: "Order ID",
     cell: ({ row }) => {
-      return <span className="font-medium">#{row.getValue("id").slice(0, 8)}</span>;
+      return <span className="font-medium">#{(row.getValue("id") as string).slice(0, 8)}</span>;
     },
   },
   {
