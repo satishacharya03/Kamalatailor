@@ -19,7 +19,7 @@ declare module "next-auth" {
   }
 }
 
-export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   pages: {
@@ -61,8 +61,9 @@ export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user, account }) {
       if (user) {
-        token.role = user.role;
-        token.id = user.id;
+        const typedUser = user as { role: "USER" | "ADMIN"; id: string };
+        token.role = typedUser.role;
+        token.id = typedUser.id;
       }
 
       if (account?.provider === "google") {
