@@ -20,7 +20,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 
 // Extend the User type to include the role
 interface User extends NextAuthUser {
-  role?: "ADMIN" | "USER"; // Add the role property
+  role: "ADMIN" | "USER";
 }
 
 export default function Navbar() {

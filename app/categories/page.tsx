@@ -1,9 +1,15 @@
+"use client";
+  
+import { useSearchParams } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
 
 export default async function CategoriesPage() {
+  const searchParams = useSearchParams();
+  const query = searchParams?.get("query") || "";
+
   const categories = await prisma.category.findMany({
     include: {
       _count: {

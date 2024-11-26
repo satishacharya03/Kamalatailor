@@ -1,5 +1,6 @@
+"use client";
+
 import { Card } from "@/components/ui/card";
-import { prisma } from "@/lib/prisma";
 import {
   BarChart,
   Bar,
@@ -9,42 +10,62 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useEffect, useState } from "react";
 
-export default async function AdminDashboard() {
-  const [totalOrders, totalProducts, totalCustomers, recentOrders] = await Promise.all([
-    prisma.order.count(),
-    prisma.product.count(),
-    prisma.user.count(),
-    prisma.order.findMany({
-      take: 5,
-      orderBy: { createdAt: "desc" },
-      include: { user: true },
-    }),
-  ]);
+interface DashboardData {
+  totalOrders: number;
+  totalProducts: number;
+  totalCustomers: number;
+  recentOrders: any[];
+}
 
-  const data = [
-    { name: "Jan", sales: 4000 },
-    { name: "Feb", sales: 3000 },
-    { name: "Mar", sales: 2000 },
-    { name: "Apr", sales: 2780 },
-    { name: "May", sales: 1890 },
-    { name: "Jun", sales: 2390 },
-  ];
+const data = [
+  { name: "Jan", sales: 4000 },
+  { name: "Feb", sales: 3000 },
+  { name: "Mar", sales: 2000 },
+  { name: "Apr", sales: 2780 },
+  { name: "May", sales: 1890 },
+  { name: "Jun", sales: 2390 },
+];
+
+export const dynamic = "force-dynamic";
+
+export default function AdminDashboard() {
+  const [dashboardData, setDashboardData] = useState<DashboardData>({
+    totalOrders: 0,
+    totalProducts: 0,
+    totalCustomers: 0,
+    recentOrders: [],
+  });
+
+  useEffect(() => {
+    async function fetchDashboardData() {
+      try {
+        const response = await fetch('/api/admin/dashboard');
+        const data = await response.json();
+        setDashboardData(data);
+      } catch (error) {
+        console.error('Failed to fetch dashboard data:', error);
+      }
+    }
+
+    fetchDashboardData();
+  }, []);
 
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="p-6">
           <h3 className="text-sm font-medium text-muted-foreground">Total Orders</h3>
-          <p className="mt-2 text-3xl font-bold">{totalOrders}</p>
+          <p className="mt-2 text-3xl font-bold">{dashboardData.totalOrders}</p>
         </Card>
         <Card className="p-6">
           <h3 className="text-sm font-medium text-muted-foreground">Total Products</h3>
-          <p className="mt-2 text-3xl font-bold">{totalProducts}</p>
+          <p className="mt-2 text-3xl font-bold">{dashboardData.totalProducts}</p>
         </Card>
         <Card className="p-6">
           <h3 className="text-sm font-medium text-muted-foreground">Total Customers</h3>
-          <p className="mt-2 text-3xl font-bold">{totalCustomers}</p>
+          <p className="mt-2 text-3xl font-bold">{dashboardData.totalCustomers}</p>
         </Card>
       </div>
 
@@ -76,7 +97,7 @@ export default async function AdminDashboard() {
               </tr>
             </thead>
             <tbody>
-              {recentOrders.map((order) => (
+              {dashboardData.recentOrders.map((order) => (
                 <tr key={order.id} className="border-b">
                   <td className="py-2">{order.id.slice(0, 8)}</td>
                   <td className="py-2">{order.user.name}</td>

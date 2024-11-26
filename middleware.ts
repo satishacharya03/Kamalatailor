@@ -1,29 +1,11 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { auth } from "@/lib/auth";
+import { NextRequest, NextResponse } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
-export async function middleware(request: NextRequest) {
-  const session = await auth();
-
-  // Admin routes protection
-  if (request.nextUrl.pathname.startsWith("/admin")) {
-    if (!session) {
-      return NextResponse.redirect(new URL("/auth/login", request.url));
-    }
-
-    if (session.user.role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-  }
-
-  // Protected routes for authenticated users
-  if (
-    request.nextUrl.pathname.startsWith("/account") ||
-    request.nextUrl.pathname.startsWith("/checkout")
-  ) {
-    if (!session) {
-      return NextResponse.redirect(new URL("/auth/login", request.url));
-    }
+export async function middleware(req: NextRequest) {
+  const token = await getToken({ req });
+  
+  if (!token) {
+    return NextResponse.redirect(new URL('/api/auth/signin', req.url));
   }
 
   return NextResponse.next();

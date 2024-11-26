@@ -4,6 +4,7 @@ import { GeneralSettings } from "./general-settings";
 import { SecuritySettings } from "./security-settings";
 import { NotificationSettings } from "./notification-settings";
 
+export const dynamic = 'force-dynamic'
 export default function SettingsPage() {
   return (
     <div className="space-y-6">

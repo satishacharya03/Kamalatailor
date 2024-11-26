@@ -1,3 +1,4 @@
+
 import { HeroSection } from '@/components/hero-section';
 import { FeaturedProducts } from '@/components/featured-products';
 import { Categories } from '@/components/categories';
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
+  
   return (
     <div className="container mx-auto pb-8 pt-3 rounded">
       <HeroSection />

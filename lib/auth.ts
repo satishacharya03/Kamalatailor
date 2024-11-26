@@ -5,7 +5,7 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import { type User } from "@prisma/client";
+import { Adapter } from "next-auth/adapters";
 
 declare module "next-auth" {
   interface Session {
@@ -17,10 +17,14 @@ declare module "next-auth" {
       role: "USER" | "ADMIN";
     };
   }
-}
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma),
+  interface User {
+    role: "USER" | "ADMIN";
+  }
+} 
+
+export const auth = NextAuth({
+  adapter: PrismaAdapter(prisma) as Adapter,
   session: { strategy: "jwt" },
   pages: {
     signIn: "/auth/login",
@@ -61,9 +65,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user, account }) {
       if (user) {
-        const typedUser = user as { role: "USER" | "ADMIN"; id: string };
-        token.role = typedUser.role;
-        token.id = typedUser.id;
+        token.role = user.role;
+        token.id = user.id;
       }
 
       if (account?.provider === "google") {

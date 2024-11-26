@@ -9,6 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { format } from "date-fns";
+import { useSearchParams } from 'next/navigation';
+
+export const dynamic = "force-dynamic";
 
 type MessageWithUser = Message & {
   sender: User;
@@ -29,6 +32,9 @@ export default function AdminChatPage() {
   const [messages, setMessages] = useState<MessageWithUser[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const searchParams = useSearchParams();
+  const query = searchParams?.get('query') || '';
 
   useEffect(() => {
     if (!session?.user?.id) return;

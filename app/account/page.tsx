@@ -1,3 +1,4 @@
+
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { Card } from "@/components/ui/card";
@@ -5,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
 export default async function AccountPage() {
   const session = await auth();
   

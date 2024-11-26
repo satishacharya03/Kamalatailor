@@ -1,11 +1,18 @@
+"use client";
+
 import { prisma } from "@/lib/prisma";
 import { DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { ProductColumns } from "./columns";
+import { useSearchParams } from "next/navigation";
 
+  
 export default async function ProductsPage() {
+  const searchParams = useSearchParams();
+  const query = searchParams?.get("query") || "";
+
   const products = await prisma.product.findMany({
     include: {
       category: true,

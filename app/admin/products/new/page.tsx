@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -27,9 +27,14 @@ const productSchema = z.object({
   images: z.array(z.string()).min(1),
 });
 
+export const dynamic = "force-dynamic";
+
 export default function NewProductPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
+
+  const query = searchParams?.get('query') || '';
 
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),

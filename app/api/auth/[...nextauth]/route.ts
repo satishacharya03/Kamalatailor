@@ -1,3 +1,6 @@
-import {handlers }from "@/lib/auth"
+import { auth } from "@/lib/auth";
 
-export const { GET, POST } = handlers
+export const { GET, POST } = auth;
+
+export const dynamic = "force-dynamic";
+    

@@ -1,8 +1,14 @@
+"use client";
+
 import { prisma } from "@/lib/prisma";
 import { ProductGrid } from "@/components/product-grid";
 import { ProductFilters } from "@/components/product-filters";
+import { useSearchParams } from "next/navigation";
 
 export default async function ProductsPage() {
+  const searchParams = useSearchParams();
+  const query = searchParams?.get("query") || "";
+
   const products = await prisma.product.findMany({
     include: {
       category: true,

@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AccountSettings } from "./account-settings";
 import { SecuritySettings } from "./security-settings";
 
+export const dynamic = 'force-dynamic'
 export default function SettingsPage() {
   return (
     <div className="space-y-6">
