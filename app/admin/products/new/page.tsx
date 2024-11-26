@@ -36,8 +36,8 @@ export default function NewProductPage() {
     defaultValues: {
       name: "",
       description: "",
-      price: "",
-      stock: "",
+      price: 0,
+      stock: 0,
       categoryId: "",
       images: [],
     },
